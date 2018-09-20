@@ -21,7 +21,7 @@ public class Author {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID)
     @SerializedName("id")
-    private long id;
+    private int id;
 
     @ColumnInfo(name = COLUMN_NAME)
     @SerializedName(COLUMN_NAME)
@@ -39,21 +39,31 @@ public class Author {
     @SerializedName(COLUMN_WIKI_LINK)
     private String wikiLink;
 
-/*    @Ignore
-    public Author(String name, String yearsOfLive, String bio) {
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public void setYearsOfLive(String yearsOfLive) {
         this.yearsOfLive = yearsOfLive;
+    }
+
+    public void setBio(String bio) {
         this.bio = bio;
     }
 
-    public Author(long id, String name, String yearsOfLive, String bio) {
-        this.id = id;
-        this.name = name;
-        this.yearsOfLive = yearsOfLive;
-        this.bio = bio;
-    }*/
+    public String getWikiLink() {
+        return wikiLink;
+    }
 
-    public long getId() {
+    public void setWikiLink(String wikiLink) {
+        this.wikiLink = wikiLink;
+    }
+
+    public int getId() {
         return id;
     }
 

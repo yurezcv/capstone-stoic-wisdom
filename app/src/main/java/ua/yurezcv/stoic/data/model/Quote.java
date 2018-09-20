@@ -3,6 +3,7 @@ package ua.yurezcv.stoic.data.model;
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.provider.BaseColumns;
 
@@ -25,38 +26,49 @@ public class Quote {
     public static final String COLUMN_SOURCE_SUBTITLE = "source_subtitle";
     public static final String COLUMN_IS_FAVORITE = "is_favorite";
 
-    public Quote(String quote, long authorId) {
-        setQuote(quote);
-        setAuthor(authorId);
-        // set default values for now
-        setFavorite(false);
+    @Ignore
+    public Quote(int id, String quote, int authorId, String sourceTitle, String sourceSubtitle) {
+        this.id = id;
+        this.quote = quote;
+        this.authorId = authorId;
+        this.sourceTitle = sourceTitle;
+        this.sourceSubtitle = sourceSubtitle;
     }
 
-    @PrimaryKey(autoGenerate = false)
+    public Quote(int id, String quote, int authorId, String sourceTitle, String sourceSubtitle, boolean isFavorite) {
+        this.id = id;
+        this.quote = quote;
+        this.authorId = authorId;
+        this.sourceTitle = sourceTitle;
+        this.sourceSubtitle = sourceSubtitle;
+        this.isFavorite = isFavorite;
+    }
+
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = COLUMN_ID)
-    private long id;
+    private int id;
 
     @ColumnInfo(name = COLUMN_QUOTE)
     private String quote;
 
     @ColumnInfo(name = COLUMN_AUTHOR)
-    private long authorId;
+    private int authorId;
 
     @ColumnInfo(name = COLUMN_SOURCE_TITLE)
     private String sourceTitle;
 
     @ColumnInfo(name = COLUMN_SOURCE_SUBTITLE)
-    private String sourceSubTitle;
+    private String sourceSubtitle;
 
     @ColumnInfo(name = COLUMN_IS_FAVORITE)
     private boolean isFavorite;
 
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -68,11 +80,11 @@ public class Quote {
         this.quote = quote;
     }
 
-    public long getAuthorId() {
+    public int getAuthorId() {
         return authorId;
     }
 
-    public void setAuthor(long authorId) {
+    public void setAuthor(int authorId) {
         this.authorId = authorId;
     }
 
@@ -92,12 +104,12 @@ public class Quote {
         isFavorite = favorite;
     }
 
-    public String getSourceSubTitle() {
-        return sourceSubTitle;
+    public String getSourceSubtitle() {
+        return sourceSubtitle;
     }
 
-    public void setSourceSubTitle(String sourceSubTitle) {
-        this.sourceSubTitle = sourceSubTitle;
+    public void setSourceSubtitle(String sourceSubTitle) {
+        this.sourceSubtitle = sourceSubTitle;
     }
 
     @Override
@@ -107,7 +119,7 @@ public class Quote {
                 ", quote='" + quote + '\'' +
                 ", author='" + authorId + '\'' +
                 ", sourceTitle='" + sourceTitle + '\'' +
-                ", sourceSubTitle='" + sourceSubTitle + '\'' +
+                ", sourceSubtitle='" + sourceSubtitle + '\'' +
                 ", isFavorite=" + isFavorite +
                 '}';
     }

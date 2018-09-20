@@ -17,4 +17,12 @@ class QuoteSource {
                 ", subtitle='" + subtitle + '\'' +
                 '}';
     }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public String getTitle() {
+        return title;
+    }
 }

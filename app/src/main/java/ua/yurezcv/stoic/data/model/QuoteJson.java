@@ -5,13 +5,13 @@ import com.google.gson.annotations.SerializedName;
 public class QuoteJson {
 
     @SerializedName("id")
-    private long id;
+    private int id;
 
     @SerializedName("quote")
     private String quote;
 
     @SerializedName("author_id")
-    private long authorId;
+    private int authorId;
 
     @SerializedName("source")
     private QuoteSource source;
@@ -24,5 +24,9 @@ public class QuoteJson {
                 ", authorId=" + authorId +
                 ", source=" + source +
                 '}';
+    }
+
+    public Quote toQuote() {
+        return new Quote(id, quote, authorId, source.getTitle(), source.getSubtitle());
     }
 }
