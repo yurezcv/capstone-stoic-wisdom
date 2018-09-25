@@ -7,6 +7,7 @@ import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.Quote;
 
 public class LocalRepository implements DataSource {
+
     @Override
     public void getAuthors(GetAuthorsCallback callback) {
 

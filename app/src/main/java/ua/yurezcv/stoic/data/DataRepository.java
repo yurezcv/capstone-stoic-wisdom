@@ -1,18 +1,34 @@
 package ua.yurezcv.stoic.data;
 
+import android.content.Context;
+
 import java.util.List;
 
+import ua.yurezcv.stoic.data.db.LocalRepository;
 import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.Quote;
 
 public class DataRepository implements DataSource {
 
-    private static final String LOG = DataRepository.class.getSimpleName();
+    private static volatile DataRepository sInstance;
 
-    private final DataSource mLocalData;
+    private final LocalRepository mLocalRepository;
+    // TODO add a proper remote repository
+    // private final RemoteRepository mRemoteRepository;
 
-    public DataRepository(DataSource mLocalData) {
-        this.mLocalData = mLocalData;
+    public DataRepository(Context context) {
+        this.mLocalRepository = new LocalRepository();
+    }
+
+    public static DataRepository getInstance(Context context) {
+        // making sInstance thread safe
+        if (sInstance == null) {
+            synchronized (DataRepository.class) {
+                if (sInstance == null) sInstance = new DataRepository(context);
+            }
+        }
+
+        return sInstance;
     }
 
     @Override
@@ -32,6 +48,7 @@ public class DataRepository implements DataSource {
 
     @Override
     public List<Quote> getQuotes(GetQuotesCallback callback) {
+        // TODO finish this method and populate the fragment
         return null;
     }
 
