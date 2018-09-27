@@ -1,32 +1,31 @@
 package ua.yurezcv.stoic.ui.quotes;
 
-import android.content.Context;
-import android.net.Uri;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.yurezcv.stoic.R;
+import ua.yurezcv.stoic.data.model.Quote;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link QuotesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link QuotesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class QuotesFragment extends Fragment {
 
     private static final String KEY_RECYCLER_VIEW_STATE = "rv-quotes-state";
@@ -41,39 +40,20 @@ public class QuotesFragment extends Fragment {
     @BindView(R.id.tv_error_message)
     TextView mErrorTextView;
 
-    private OnFragmentInteractionListener mListener;
+    // private OnFragmentInteractionListener mListener;
 
-    private QuotesRecyclerViewAdapter mRecipesAdapter;
+    private QuotesRecyclerViewAdapter mQuotesListAdapter;
 
     public QuotesFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment QuotesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static QuotesFragment newInstance(String param1, String param2) {
-        QuotesFragment fragment = new QuotesFragment();
-/*        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);*/
-        return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            // mParam1 = getArguments().getString(ARG_PARAM1);
-            // mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mQuotesListAdapter = new QuotesRecyclerViewAdapter(new ArrayList<Quote>());
+
+        setupViewModel();
     }
 
     @Override
@@ -85,7 +65,7 @@ public class QuotesFragment extends Fragment {
         // init the recycler view
         mQuotesGridRecycleView.setLayoutManager(
                 new GridLayoutManager(view.getContext(), calcNumberOfColumns()));
-        mQuotesGridRecycleView.setAdapter(mRecipesAdapter);
+        mQuotesGridRecycleView.setAdapter(mQuotesListAdapter);
 
         // restore RecyclerView state if the bundle exists
         if(savedInstanceState != null) {
@@ -96,14 +76,13 @@ public class QuotesFragment extends Fragment {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+/*    public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-    }
+    }*/
 
-    @Override
+/*    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -118,6 +97,23 @@ public class QuotesFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }*/
+
+    private void setupViewModel() {
+        QuotesViewModel viewModel = ViewModelProviders.of(this).get(QuotesViewModel.class);
+        viewModel.getQuotes().observe(this, new Observer<List<Quote>>() {
+            @Override
+            public void onChanged(@Nullable List<Quote> quoteList) {
+
+                mQuotesListAdapter.setData(quoteList);
+
+                Log.d("QuotesFragment", "onSuccess, count = " + mQuotesListAdapter.getItemCount());
+
+                if (!mQuotesListAdapter.isEmpty()) {
+                    hideProgressBar();
+                }
+            }
+        });
     }
 
     @Override
@@ -150,8 +146,7 @@ public class QuotesFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
+ /*   public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Uri uri);
-    }
+    }*/
 }

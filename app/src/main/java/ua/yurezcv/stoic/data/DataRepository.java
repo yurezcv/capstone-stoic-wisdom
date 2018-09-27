@@ -7,24 +7,23 @@ import java.util.List;
 import ua.yurezcv.stoic.data.db.LocalRepository;
 import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
 public class DataRepository implements DataSource {
 
     private static volatile DataRepository sInstance;
 
     private final LocalRepository mLocalRepository;
-    // TODO add a proper remote repository
-    // private final RemoteRepository mRemoteRepository;
 
-    public DataRepository(Context context) {
-        this.mLocalRepository = new LocalRepository();
+    private DataRepository(Context context, AppExecutors executors) {
+        this.mLocalRepository = new LocalRepository(context, executors);
     }
 
-    public static DataRepository getInstance(Context context) {
+    public static DataRepository getInstance(Context context, AppExecutors executors) {
         // making sInstance thread safe
         if (sInstance == null) {
             synchronized (DataRepository.class) {
-                if (sInstance == null) sInstance = new DataRepository(context);
+                if (sInstance == null) sInstance = new DataRepository(context, executors);
             }
         }
 
@@ -47,14 +46,14 @@ public class DataRepository implements DataSource {
     }
 
     @Override
-    public List<Quote> getQuotes(GetQuotesCallback callback) {
+    public void getQuotes(GetQuotesCallback callback) {
         // TODO finish this method and populate the fragment
-        return null;
+        mLocalRepository.getQuotes(callback);
     }
 
     @Override
-    public Quote getQuoteById(long quoteId) {
-        return null;
+    public void getQuoteById(long quoteId) {
+
     }
 
     @Override

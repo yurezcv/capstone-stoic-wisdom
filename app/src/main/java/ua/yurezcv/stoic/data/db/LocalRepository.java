@@ -1,12 +1,26 @@
 package ua.yurezcv.stoic.data.db;
 
+import android.arch.persistence.room.Room;
+import android.content.Context;
+
 import java.util.List;
 
 import ua.yurezcv.stoic.data.DataSource;
 import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.utils.EmptyLocalDataException;
+import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
 public class LocalRepository implements DataSource {
+
+    private final StoicWisdomDatabase mDatabase;
+    private final AppExecutors mExecutors;
+
+    public LocalRepository(Context context, AppExecutors executors) {
+        this.mDatabase = Room.databaseBuilder(context.getApplicationContext(),
+                StoicWisdomDatabase.class, StoicWisdomDatabase.DATABASE_NAME).build();
+        this.mExecutors = executors;
+    }
 
     @Override
     public void getAuthors(GetAuthorsCallback callback) {
@@ -24,13 +38,34 @@ public class LocalRepository implements DataSource {
     }
 
     @Override
-    public List<Quote> getQuotes(GetQuotesCallback callback) {
-        return null;
+    public void getQuotes(final GetQuotesCallback callback) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(isEmpty()) {
+                    callback.onFailure(new EmptyLocalDataException("No data in the database"));
+                }
+                final List<Quote> quotes = mDatabase.quoteDao().getAllQuotes();
+                mExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (quotes == null) {
+                            // This will be called if the table is new or just empty.
+                            callback.onFailure(new EmptyLocalDataException("No data in the database"));
+                        } else {
+                            callback.onSuccess(quotes);
+                        }
+                    }
+                });
+            }
+        };
+
+        mExecutors.diskIO().execute(runnable);
     }
 
     @Override
-    public Quote getQuoteById(long quoteId) {
-        return null;
+    public void getQuoteById(long quoteId) {
+
     }
 
     @Override
@@ -42,4 +77,10 @@ public class LocalRepository implements DataSource {
     public void saveQuotes(List<Quote> quotes) {
 
     }
+
+    private boolean isEmpty() {
+        return mDatabase.authorDao().count() == 0 || mDatabase.quoteDao().count() == 0;
+    }
+
+
 }

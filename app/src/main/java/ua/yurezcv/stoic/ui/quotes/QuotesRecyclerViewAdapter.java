@@ -50,12 +50,12 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mValues.size();
     }
 
-    public void setData(List<Quote> recipes) {
+    public void setData(List<Quote> quotes) {
         if (mValues != null) {
-            mValues.addAll(recipes);
+            mValues.addAll(quotes);
             notifyDataSetChanged();
         }
     }

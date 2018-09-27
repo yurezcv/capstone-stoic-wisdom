@@ -38,9 +38,9 @@ public interface DataSource {
         void onNetworkFailure();
     }
 
-    List<Quote> getQuotes(GetQuotesCallback callback);
+    void getQuotes(GetQuotesCallback callback);
 
-    Quote getQuoteById(long quoteId);
+    void getQuoteById(long quoteId);
 
     void markQuoteAsFavorite(long quoteId);
 
