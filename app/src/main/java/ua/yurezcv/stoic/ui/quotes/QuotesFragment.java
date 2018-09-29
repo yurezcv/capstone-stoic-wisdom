@@ -9,8 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.yurezcv.stoic.R;
-import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.data.model.QuoteDisplay;
 
 
 public class QuotesFragment extends Fragment {
@@ -51,7 +51,7 @@ public class QuotesFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mQuotesListAdapter = new QuotesRecyclerViewAdapter(new ArrayList<Quote>());
+        mQuotesListAdapter = new QuotesRecyclerViewAdapter(new ArrayList<QuoteDisplay>());
 
         setupViewModel();
     }
@@ -62,13 +62,15 @@ public class QuotesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_quotes, container, false);
         ButterKnife.bind(this, view);
 
+
         // init the recycler view
         mQuotesGridRecycleView.setLayoutManager(
-                new GridLayoutManager(view.getContext(), calcNumberOfColumns()));
+                new StaggeredGridLayoutManager(calcNumberOfColumns(),
+                        StaggeredGridLayoutManager.VERTICAL));
         mQuotesGridRecycleView.setAdapter(mQuotesListAdapter);
 
         // restore RecyclerView state if the bundle exists
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             Parcelable recyclerViewState = savedInstanceState.getParcelable(KEY_RECYCLER_VIEW_STATE);
             mQuotesGridRecycleView.getLayoutManager().onRestoreInstanceState(recyclerViewState);
         }
@@ -101,13 +103,11 @@ public class QuotesFragment extends Fragment {
 
     private void setupViewModel() {
         QuotesViewModel viewModel = ViewModelProviders.of(this).get(QuotesViewModel.class);
-        viewModel.getQuotes().observe(this, new Observer<List<Quote>>() {
+        viewModel.getQuotes().observe(this, new Observer<List<QuoteDisplay>>() {
             @Override
-            public void onChanged(@Nullable List<Quote> quoteList) {
+            public void onChanged(@Nullable List<QuoteDisplay> quoteList) {
 
                 mQuotesListAdapter.setData(quoteList);
-
-                Log.d("QuotesFragment", "onSuccess, count = " + mQuotesListAdapter.getItemCount());
 
                 if (!mQuotesListAdapter.isEmpty()) {
                     hideProgressBar();

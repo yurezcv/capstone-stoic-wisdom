@@ -14,7 +14,7 @@ public class QuoteJson {
     private int authorId;
 
     @SerializedName("source")
-    private QuoteSource source;
+    private Source source;
 
     @Override
     public String toString() {

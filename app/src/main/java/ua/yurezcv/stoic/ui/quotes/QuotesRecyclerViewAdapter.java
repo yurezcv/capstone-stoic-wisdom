@@ -13,13 +13,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.yurezcv.stoic.R;
 import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.data.model.QuoteDisplay;
 
 public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Quote> mValues;
+    private final List<QuoteDisplay> mValues;
     // private final OnListFragmentInteractionListener mListener;
 
-    public QuotesRecyclerViewAdapter(List<Quote> mValues) {
+    QuotesRecyclerViewAdapter(List<QuoteDisplay> mValues) {
         this.mValues = mValues;
     }
 
@@ -33,7 +34,7 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Quote quote = mValues.get(position);
+        QuoteDisplay quote = mValues.get(position);
         holder.bind(quote);
 
         /*holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +54,7 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
         return mValues.size();
     }
 
-    public void setData(List<Quote> quotes) {
+    public void setData(List<QuoteDisplay> quotes) {
         if (mValues != null) {
             mValues.addAll(quotes);
             notifyDataSetChanged();
@@ -66,10 +67,17 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         final View mView;
+
         @BindView(R.id.tv_quote)
         TextView mQuoteTextView;
 
-        Quote mQuote;
+        @BindView(R.id.tv_author)
+        TextView mAuthorTextView;
+
+        @BindView(R.id.tv_source)
+        TextView mSourceTextView;
+
+        QuoteDisplay mQuote;
 
         ViewHolder(View view) {
             super(view);
@@ -77,9 +85,11 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
             ButterKnife.bind(this, view);
         }
 
-        void bind(Quote quote) {
+        void bind(QuoteDisplay quote) {
             mQuote = quote;
             mQuoteTextView.setText(mQuote.getQuote());
+            mAuthorTextView.setText(mQuote.getAuthor());
+            mSourceTextView.setText(mQuote.getSource());
         }
 
         @Override

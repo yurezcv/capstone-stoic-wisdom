@@ -4,6 +4,7 @@ import java.util.List;
 
 import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.data.model.QuoteDisplay;
 
 public interface DataSource {
     /* Methods and interface callbacks related to Author */
@@ -31,7 +32,7 @@ public interface DataSource {
     /* Methods and callbacks related to Quotes */
     interface GetQuotesCallback {
 
-        void onSuccess(List<Quote> quotes);
+        void onSuccess(List<QuoteDisplay> quotes);
 
         void onFailure(Throwable throwable);
 
@@ -42,7 +43,7 @@ public interface DataSource {
 
     void getQuoteById(long quoteId);
 
-    void markQuoteAsFavorite(long quoteId);
+    void markAsFavorite(long quoteId);
 
     void saveQuotes(List<Quote> quotes);
 }

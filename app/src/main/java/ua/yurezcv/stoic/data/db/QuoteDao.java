@@ -27,7 +27,7 @@ public interface QuoteDao {
     void insert(List<Quote> quotes);
 
     @Query("SELECT * FROM " + Quote.TABLE_NAME)
-    List<Quote> getAllQuotes();
+    List<Quote> getAll();
 
     @Query("SELECT * FROM " + Quote.TABLE_NAME + " WHERE " + Quote.COLUMN_ID + " = :quoteId")
     Quote loadById(int quoteId);

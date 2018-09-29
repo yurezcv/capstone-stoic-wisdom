@@ -12,7 +12,7 @@ import java.util.concurrent.Executors;
 
 import ua.yurezcv.stoic.data.DataRepository;
 import ua.yurezcv.stoic.data.DataSource;
-import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 import ua.yurezcv.stoic.utils.threading.DiskIOThreadExecutor;
 
@@ -20,9 +20,8 @@ public class QuotesViewModel extends AndroidViewModel {
 
     private static final String TAG = "QuotesViewModel";
 
-    private MutableLiveData<List<Quote>> mQuotes;
+    private MutableLiveData<List<QuoteDisplay>> mQuotes;
 
-    // TODO finish getting data from the Repository
     public QuotesViewModel(@NonNull Application application) {
         super(application);
 
@@ -37,7 +36,7 @@ public class QuotesViewModel extends AndroidViewModel {
 
         dataRepository.getQuotes(new DataSource.GetQuotesCallback() {
             @Override
-            public void onSuccess(List<Quote> quotes) {
+            public void onSuccess(List<QuoteDisplay> quotes) {
                 Log.d(TAG, "onSuccess");
                 mQuotes.setValue(quotes);
             }
@@ -55,7 +54,7 @@ public class QuotesViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<List<Quote>> getQuotes() {
+    public LiveData<List<QuoteDisplay>> getQuotes() {
         return mQuotes;
     }
 }

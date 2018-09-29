@@ -2,7 +2,7 @@ package ua.yurezcv.stoic.data.model;
 
 import com.google.gson.annotations.SerializedName;
 
-class QuoteSource {
+class Source {
 
     @SerializedName("title")
     private String title;
@@ -12,7 +12,7 @@ class QuoteSource {
 
     @Override
     public String toString() {
-        return "QuoteSource{" +
+        return "Source{" +
                 "title='" + title + '\'' +
                 ", subtitle='" + subtitle + '\'' +
                 '}';

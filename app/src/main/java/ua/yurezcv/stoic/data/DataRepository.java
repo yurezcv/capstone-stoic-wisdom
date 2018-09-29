@@ -57,7 +57,7 @@ public class DataRepository implements DataSource {
     }
 
     @Override
-    public void markQuoteAsFavorite(long quoteId) {
+    public void markAsFavorite(long quoteId) {
 
     }
 

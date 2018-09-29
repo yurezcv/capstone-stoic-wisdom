@@ -112,6 +112,10 @@ public class Quote {
         this.sourceSubtitle = sourceSubTitle;
     }
 
+    public String getSource() {
+        return getSourceTitle() + "\n" + getSourceSubtitle();
+    }
+
     @Override
     public String toString() {
         return "Quote{" +

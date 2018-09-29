@@ -2,12 +2,15 @@ package ua.yurezcv.stoic.data.db;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
+import android.util.SparseArray;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.yurezcv.stoic.data.DataSource;
 import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.utils.EmptyLocalDataException;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
@@ -40,12 +43,32 @@ public class LocalRepository implements DataSource {
     @Override
     public void getQuotes(final GetQuotesCallback callback) {
         Runnable runnable = new Runnable() {
+
             @Override
             public void run() {
-                if(isEmpty()) {
+                if (isEmpty()) {
                     callback.onFailure(new EmptyLocalDataException("No data in the database"));
                 }
-                final List<Quote> quotes = mDatabase.quoteDao().getAllQuotes();
+                List<Quote> quotesDb = mDatabase.quoteDao().getAll();
+                List<Author> authors = mDatabase.authorDao().getAll();
+
+                SparseArray<Author> authorMap = new SparseArray<>();
+                for (Author author : authors) {
+                    authorMap.append(author.getId(), author);
+                }
+
+                final List<QuoteDisplay> quotes = new ArrayList<>();
+                for (Quote quote : quotesDb) {
+                    QuoteDisplay quoteDisplay = new QuoteDisplay(
+                            quote.getId(),
+                            quote.getQuote(),
+                            authorMap.get(quote.getAuthorId()).getName(),
+                            quote.getSource()
+                    );
+
+                    quotes.add(quoteDisplay);
+                }
+
                 mExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
@@ -69,7 +92,7 @@ public class LocalRepository implements DataSource {
     }
 
     @Override
-    public void markQuoteAsFavorite(long quoteId) {
+    public void markAsFavorite(long quoteId) {
 
     }
 

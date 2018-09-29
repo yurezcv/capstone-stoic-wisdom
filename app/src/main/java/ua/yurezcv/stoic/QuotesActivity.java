@@ -53,7 +53,7 @@ public class QuotesActivity extends AppCompatActivity {
             Log.d(TAG, "authors table count = " + database.authorDao().count());
             Log.d(TAG, "quotes table count = " + database.quoteDao().count());
 
-            List<Quote> quotes = database.quoteDao().getAllQuotes();
+            List<Quote> quotes = database.quoteDao().getAll();
 
             Log.d(TAG, "quote #1 = " + quotes.get(0).getQuote());
             Log.d(TAG, "quote #5 = " + quotes.get(4).getQuote());

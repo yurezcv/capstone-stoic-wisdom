@@ -2,4 +2,12 @@
     <string name="app_name">Stoic Wisdom</string>
     <string name="like">Like</string>
     <string name="share">Share</string>
+
+    <string name="sample_quote">Do not think that what is hard for you to master is humanly impossible; but if a thing is humanly possible, consider it to be within your reach</string>
+    <string name="sample_author">Marcus Aurelius</string>
+    <string name="sample_source">Meditations\nBook III, 5</string>
+
+    <string name="cd_like_button">Like quote button</string>
+    <string name="cd_share_button">Share quote button</string>
+
 </resources>
