@@ -5,20 +5,17 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import java.util.List;
-import java.util.concurrent.Executors;
 
+import ua.yurezcv.stoic.StoicWisdomApp;
 import ua.yurezcv.stoic.data.DataRepository;
 import ua.yurezcv.stoic.data.DataSource;
 import ua.yurezcv.stoic.data.model.QuoteDisplay;
+import ua.yurezcv.stoic.utils.EmptyLocalDataException;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
-import ua.yurezcv.stoic.utils.threading.DiskIOThreadExecutor;
 
 public class QuotesViewModel extends AndroidViewModel {
-
-    private static final String TAG = "QuotesViewModel";
 
     private MutableLiveData<List<QuoteDisplay>> mQuotes;
 
@@ -27,24 +24,25 @@ public class QuotesViewModel extends AndroidViewModel {
 
         mQuotes = new MutableLiveData<>();
 
-        AppExecutors appExecutors = AppExecutors.getInstance(new DiskIOThreadExecutor(),
-                Executors.newFixedThreadPool(AppExecutors.THREAD_COUNT),
-                new AppExecutors.MainThreadExecutor());
+        getData();
+    }
 
+    public void getData() {
+        AppExecutors appExecutors = StoicWisdomApp.getExecutors();
         DataRepository dataRepository = DataRepository.getInstance(this.getApplication(),
                 appExecutors);
 
         dataRepository.getQuotes(new DataSource.GetQuotesCallback() {
             @Override
             public void onSuccess(List<QuoteDisplay> quotes) {
-                Log.d(TAG, "onSuccess");
-                mQuotes.setValue(quotes);
+                mQuotes.postValue(quotes);
             }
 
             @Override
             public void onFailure(Throwable throwable) {
-                Log.d(TAG, "onFailure");
-                Log.e(TAG, throwable.getMessage());
+                if (throwable instanceof EmptyLocalDataException) {
+                    mQuotes.setValue(null);
+                }
             }
 
             @Override

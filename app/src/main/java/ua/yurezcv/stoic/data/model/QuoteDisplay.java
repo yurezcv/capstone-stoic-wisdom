@@ -6,12 +6,14 @@ public class QuoteDisplay {
     private String quote;
     private String author;
     private String source;
+    private boolean isFavorite;
 
-    public QuoteDisplay(int id, String quote, String author, String source) {
+    public QuoteDisplay(int id, String quote, String author, String source, boolean isFavorite) {
         this.id = id;
         this.quote = quote;
         this.author = author;
         this.source = source;
+        this.isFavorite = isFavorite;
     }
 
     public int getId() {
@@ -45,5 +47,17 @@ public class QuoteDisplay {
 
     public void setSource(String source) {
         this.source = source;
+    }
+
+    public boolean isFavorite() {
+        return isFavorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        isFavorite = favorite;
+    }
+
+    public String getSharableContent() {
+        return "\u201C"+quote+"\u201D " + getAuthor();
     }
 }

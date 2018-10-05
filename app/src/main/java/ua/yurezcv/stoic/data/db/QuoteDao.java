@@ -41,6 +41,9 @@ public interface QuoteDao {
     @Query("SELECT * FROM " + Quote.TABLE_NAME + " WHERE " + Quote.COLUMN_IS_FAVORITE + " = 1")
     List<Quote> loadFavoriteQuotes();
 
+    @Query("UPDATE " + Quote.TABLE_NAME + " SET " + Quote.COLUMN_IS_FAVORITE + "= :isFavorite WHERE " + Quote.COLUMN_ID + " = :id")
+    int markAsFavorite(int id, boolean isFavorite);
+
     @Query("DELETE FROM " + Quote.TABLE_NAME)
     void truncateTable();
 

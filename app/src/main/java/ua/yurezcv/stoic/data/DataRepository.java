@@ -47,18 +47,17 @@ public class DataRepository implements DataSource {
 
     @Override
     public void getQuotes(GetQuotesCallback callback) {
-        // TODO finish this method and populate the fragment
         mLocalRepository.getQuotes(callback);
     }
 
     @Override
-    public void getQuoteById(long quoteId) {
+    public void getQuoteById(int quoteId) {
 
     }
 
     @Override
-    public void markAsFavorite(long quoteId) {
-
+    public void markAsFavorite(int quoteId, boolean isFavorite) {
+        mLocalRepository.markAsFavorite(quoteId, isFavorite);
     }
 
     @Override

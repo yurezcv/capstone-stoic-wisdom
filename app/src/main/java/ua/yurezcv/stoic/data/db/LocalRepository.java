@@ -46,9 +46,16 @@ public class LocalRepository implements DataSource {
 
             @Override
             public void run() {
+
                 if (isEmpty()) {
-                    callback.onFailure(new EmptyLocalDataException("No data in the database"));
+                    mExecutors.mainThread().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onFailure(new EmptyLocalDataException("No data in the database"));
+                        }
+                    });
                 }
+
                 List<Quote> quotesDb = mDatabase.quoteDao().getAll();
                 List<Author> authors = mDatabase.authorDao().getAll();
 
@@ -63,8 +70,8 @@ public class LocalRepository implements DataSource {
                             quote.getId(),
                             quote.getQuote(),
                             authorMap.get(quote.getAuthorId()).getName(),
-                            quote.getSource()
-                    );
+                            quote.getSource(),
+                            quote.isFavorite());
 
                     quotes.add(quoteDisplay);
                 }
@@ -72,12 +79,7 @@ public class LocalRepository implements DataSource {
                 mExecutors.mainThread().execute(new Runnable() {
                     @Override
                     public void run() {
-                        if (quotes == null) {
-                            // This will be called if the table is new or just empty.
-                            callback.onFailure(new EmptyLocalDataException("No data in the database"));
-                        } else {
-                            callback.onSuccess(quotes);
-                        }
+                        callback.onSuccess(quotes);
                     }
                 });
             }
@@ -87,13 +89,21 @@ public class LocalRepository implements DataSource {
     }
 
     @Override
-    public void getQuoteById(long quoteId) {
+    public void getQuoteById(int quoteId) {
 
     }
 
     @Override
-    public void markAsFavorite(long quoteId) {
+    public void markAsFavorite(final int quoteId, final boolean isFavorite) {
+        Runnable runnable = new Runnable() {
 
+            @Override
+            public void run() {
+                mDatabase.quoteDao().markAsFavorite(quoteId, isFavorite);
+            }
+        };
+
+        mExecutors.diskIO().execute(runnable);
     }
 
     @Override

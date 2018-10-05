@@ -9,5 +9,49 @@
 
     <string name="cd_like_button">Like quote button</string>
     <string name="cd_share_button">Share quote button</string>
+    <string name="menu_title_setting">Settings</string>
+    <string name="menu_title_authors">Authors</string>
+    <string name="sharable_title">Share this quote via</string>
+
+
+    <!-- Strings related to Settings -->
+    <string name="title_activity_settings">Settings</string>
+
+    <string name="pref_key_enable_notifications" translatable="false">key_enable_notifications</string>
+    <string name="pref_default_enable_notifications" translatable="false">false</string>
+    <string name="pref_title_enable_notifications">Enable Notifications</string>
+
+    <string name="pref_key_notification_freq" translatable="false">key_notification_frequency</string>
+    <string name="pref_default_notification_freq" translatable="false">86400</string>
+    <string name="pref_title_notification_freq">Notification Frequency</string>
+    <string-array name="pref_list_notifications_freq">
+        <item>Daily</item>
+        <item>Every other day</item>
+        <item>Weekly</item>
+        <item>Every other week</item>
+        <item>Monthly</item>
+    </string-array>
+    <string-array name="pref_list_notifications_freq_values" translatable="false">
+        <item>86400</item>
+        <item>172800</item>
+        <item>604800</item>
+        <item>1209600</item>
+        <item>2419200</item>
+    </string-array>
+
+    <string name="pref_key_notification_time" translatable="false">key_notification_time</string>
+    <string name="pref_default_notification_time" translatable="false">9:30</string>
+    <string name="pref_title_notification_time">Notification Time</string>
+    <string-array name="pref_list_notifications_time">
+        <item>Morning (9:30am)</item>
+        <item>Afternoon (1:30pm)</item>
+        <item>Evening (7:30pm)</item>
+    </string-array>
+    <string-array name="pref_list_notifications_time_values" translatable="false">
+        <item>9:30</item>
+        <item>13:30</item>
+        <item>19:30</item>
+    </string-array>
+
 
 </resources>

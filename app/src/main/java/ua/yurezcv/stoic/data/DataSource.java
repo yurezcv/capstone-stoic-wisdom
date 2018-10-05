@@ -41,9 +41,9 @@ public interface DataSource {
 
     void getQuotes(GetQuotesCallback callback);
 
-    void getQuoteById(long quoteId);
+    void getQuoteById(int quoteId);
 
-    void markAsFavorite(long quoteId);
+    void markAsFavorite(int quoteId, boolean isFavorite);
 
     void saveQuotes(List<Quote> quotes);
 }

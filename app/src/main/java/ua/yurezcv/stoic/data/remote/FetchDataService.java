@@ -1,10 +1,12 @@
 package ua.yurezcv.stoic.data.remote;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
@@ -19,6 +21,7 @@ import ua.yurezcv.stoic.data.model.QuoteJson;
 public class FetchDataService extends IntentService {
 
     public static final String KEY_REQUEST = "request";
+    public static final String KEY_RECEIVER = "receiver";
 
     public static final int CODE_QUOTES = 0;
     public static final int CODE_AUTHORS = 1;
@@ -55,14 +58,14 @@ public class FetchDataService extends IntentService {
         switch (code) {
             case CODE_QUOTES:
                 List<QuoteJson> responseQuotes = fetchQuotes();
-                // List<Quote> quotes = new ArrayList<>();
-
-                // Log.d(TAG, responseQuotes.toString());
-                // mDatabase.quoteDao().truncateTable();
 
                 for (QuoteJson quoteJson: responseQuotes) {
-                    // quotes.add(quoteJson.toQuote());
                     mDatabase.quoteDao().insert(quoteJson.toQuote());
+                }
+
+                ResultReceiver rec = intent.getParcelableExtra(KEY_RECEIVER);
+                if(rec != null) {
+                    rec.send(Activity.RESULT_OK, null);
                 }
 
                 Log.d(TAG, "count in quotes table = " + mDatabase.quoteDao().count());
@@ -71,13 +74,6 @@ public class FetchDataService extends IntentService {
                 break;
             case CODE_AUTHORS:
                 List<Author> authors = fetchAuthors();
-
-                // Log.d(TAG, authors.toString());
-                // mDatabase.authorDao().truncateTable();
-
-                /*for (Author author: authors) {
-                    mDatabase.authorDao().insert(author);
-                }*/
 
                 mDatabase.authorDao().insert(authors);
 
