@@ -66,21 +66,21 @@
                 android:layout_marginRight="@dimen/cardview_view_margin"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/cd_like_button"
-                android:src="@drawable/ic_favorites_outline"
                 android:text="@string/like"
                 android:textAllCaps="true"
-                android:theme="@style/PrimaryFlatButton" />
+                android:theme="@style/PrimaryFlatButton"
+                app:srcCompat="@drawable/ic_favorites_outline" />
 
             <ImageButton
                 android:id="@+id/btn_share_quote"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                android:src="@drawable/ic_share"
                 android:contentDescription="@string/cd_share_button"
                 android:text="@string/share"
                 android:textAllCaps="true"
-                android:theme="@style/PrimaryFlatButton" />
+                android:theme="@style/PrimaryFlatButton"
+                app:srcCompat="@drawable/ic_share" />
         </LinearLayout>
     </LinearLayout>
 

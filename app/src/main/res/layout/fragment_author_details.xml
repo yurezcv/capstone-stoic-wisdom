@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.authors.AuthorDetailsFragment">
+
+        <ImageView
+            android:id="@+id/iv_detail_backdrop"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:adjustViewBounds="true"
+            android:background="@color/colorPrimary"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <android.support.v4.widget.Space
+            android:id="@+id/view_spacer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="100dp"
+            app:layout_constraintBottom_toBottomOf="@id/iv_detail_backdrop"
+            app:layout_constraintLeft_toLeftOf="@id/iv_detail_backdrop"
+            app:layout_constraintRight_toRightOf="@id/iv_detail_backdrop" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="@id/view_spacer">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/iv_author_circle_image"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:background="@color/colorAccent"
+                tools:src="@tools:sample/backgrounds/scenic" />
+
+            <TextView
+                android:id="@+id/tv_author_details_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                tools:text="Marcus Aurelius" />
+
+            <TextView
+                android:id="@+id/tv_author_details_years"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Menu"
+                android:textColor="@color/textSecondary"
+                tools:text="26 April 121 – 17 March 180 AD" />
+
+            <TextView
+                android:id="@+id/tv_author_details_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:lineSpacingExtra="4dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:text="@tools:sample/lorem/random" />
+
+            <Button
+                android:id="@+id/btn_author_details_wiki"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_title_wiki_page"
+                android:theme="@style/PrimaryFlatButton" />
+        </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</ScrollView>

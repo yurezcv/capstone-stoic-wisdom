@@ -34,6 +34,10 @@ import java.util.List;
  */
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
+    public static Intent createIntent(Context context) {
+        return new Intent(context, SettingsActivity.class);
+    }
+
     /**
      * A preference value change listener that updates the preference's summary
      * to reflect its new value.
@@ -123,7 +127,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public boolean onOptionsItemSelected(MenuItem item) {
             int id = item.getItemId();
             if (id == android.R.id.home) {
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                getActivity().finish();
                 return true;
             }
             return super.onOptionsItemSelected(item);

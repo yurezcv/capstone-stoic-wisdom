@@ -27,7 +27,12 @@
 
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".QuotesActivity" />
+        <activity
+            android:name=".AuthorsActivity"
+            android:label="@string/title_activity_authors"
+            android:parentActivityName=".QuotesActivity" />
     </application>
 
 </manifest>

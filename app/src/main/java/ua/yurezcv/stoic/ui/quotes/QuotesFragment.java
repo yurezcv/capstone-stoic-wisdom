@@ -106,7 +106,7 @@ public class QuotesFragment extends Fragment {
     private void setupViewModel(boolean isRefresh) {
         QuotesViewModel viewModel = ViewModelProviders.of(this).get(QuotesViewModel.class);
         if (isRefresh) {
-            viewModel.getData();
+            viewModel.loadData();
         } else {
             viewModel.getQuotes().observe(this, new Observer<List<QuoteDisplay>>() {
 

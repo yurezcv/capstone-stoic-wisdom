@@ -1,4 +1,4 @@
-package ua.yurezcv.stoic.ui.quotes;
+package ua.yurezcv.stoic.ui.authors;
 
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
@@ -11,37 +11,37 @@ import java.util.List;
 import ua.yurezcv.stoic.StoicWisdomApp;
 import ua.yurezcv.stoic.data.DataRepository;
 import ua.yurezcv.stoic.data.DataSource;
-import ua.yurezcv.stoic.data.model.QuoteDisplay;
+import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.utils.EmptyLocalDataException;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
-public class QuotesViewModel extends AndroidViewModel {
+public class AuthorsViewModel extends AndroidViewModel {
 
-    private MutableLiveData<List<QuoteDisplay>> mQuotes;
+    private MutableLiveData<List<Author>> mAuthors;
 
-    public QuotesViewModel(@NonNull Application application) {
+    public AuthorsViewModel(@NonNull Application application) {
         super(application);
 
-        mQuotes = new MutableLiveData<>();
+        mAuthors = new MutableLiveData<>();
 
         loadData();
     }
 
-    public void loadData() {
+    private void loadData() {
         AppExecutors appExecutors = StoicWisdomApp.getExecutors();
         DataRepository dataRepository = DataRepository.getInstance(this.getApplication(),
                 appExecutors);
 
-        dataRepository.getQuotes(new DataSource.GetQuotesCallback() {
+        dataRepository.getAuthors(new DataSource.GetAuthorsCallback() {
             @Override
-            public void onSuccess(List<QuoteDisplay> quotes) {
-                mQuotes.postValue(quotes);
+            public void onSuccess(List<Author> authors) {
+                mAuthors.postValue(authors);
             }
 
             @Override
             public void onFailure(Throwable throwable) {
                 if (throwable instanceof EmptyLocalDataException) {
-                    mQuotes.setValue(null);
+                    mAuthors.setValue(null);
                 }
             }
 
@@ -52,7 +52,7 @@ public class QuotesViewModel extends AndroidViewModel {
         });
     }
 
-    public LiveData<List<QuoteDisplay>> getQuotes() {
-        return mQuotes;
+    public LiveData<List<Author>> getAuthors() {
+        return mAuthors;
     }
 }

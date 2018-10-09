@@ -32,7 +32,7 @@ public class DataRepository implements DataSource {
 
     @Override
     public void getAuthors(GetAuthorsCallback callback) {
-
+        mLocalRepository.getAuthors(callback);
     }
 
     @Override

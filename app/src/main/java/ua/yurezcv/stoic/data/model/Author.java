@@ -4,12 +4,14 @@ import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.BaseColumns;
 
 import com.google.gson.annotations.SerializedName;
 
 @Entity(tableName = Author.TABLE_NAME)
-public class Author {
+public class Author implements Parcelable {
     public static final String TABLE_NAME = "authors";
 
     public static final String COLUMN_ID = BaseColumns._ID;
@@ -89,4 +91,42 @@ public class Author {
                 ", wikiLink='" + wikiLink + '\'' +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.name);
+        dest.writeString(this.yearsOfLive);
+        dest.writeString(this.bio);
+        dest.writeString(this.wikiLink);
+    }
+
+    public Author() {
+    }
+
+    protected Author(Parcel in) {
+        this.id = in.readInt();
+        this.name = in.readString();
+        this.yearsOfLive = in.readString();
+        this.bio = in.readString();
+        this.wikiLink = in.readString();
+    }
+
+    public static final Creator<Author> CREATOR = new Creator<Author>() {
+        @Override
+        public Author createFromParcel(Parcel source) {
+            return new Author(source);
+        }
+
+        @Override
+        public Author[] newArray(int size) {
+            return new Author[size];
+        }
+    };
 }

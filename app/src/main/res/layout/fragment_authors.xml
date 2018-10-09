@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.quotes.QuotesFragment">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_quotes"
-        android:name="QuotesFragment"
+        android:id="@+id/rv_authors"
+        android:name="ua.yurezcv.stoic.ui.authors.AuthorsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:visibility="invisible"
-        tools:listitem="@layout/list_item_quote" />
+        app:layoutManager="LinearLayoutManager"
+        tools:context=".ui.authors.AuthorsFragment"
+        tools:listitem="@layout/list_item_author" />
 
     <include layout="@layout/layout_pb_and_error" />
 

@@ -26,8 +26,33 @@ public class LocalRepository implements DataSource {
     }
 
     @Override
-    public void getAuthors(GetAuthorsCallback callback) {
+    public void getAuthors(final GetAuthorsCallback callback) {
+        Runnable runnable = new Runnable() {
 
+            @Override
+            public void run() {
+
+                if (isEmpty()) {
+                    mExecutors.mainThread().execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            callback.onFailure(new EmptyLocalDataException("No data in the database"));
+                        }
+                    });
+                }
+
+                final List<Author> authors = mDatabase.authorDao().getAll();
+
+                mExecutors.mainThread().execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onSuccess(authors);
+                    }
+                });
+            }
+        };
+
+        mExecutors.diskIO().execute(runnable);
     }
 
     @Override

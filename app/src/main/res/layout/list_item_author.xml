@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:paddingBottom="16dp">
+
+    <ImageView
+        android:id="@+id/iv_author_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_sample_author_1"
+        tools:src="@drawable/ic_sample_author_1" />
+
+    <TextView
+        android:id="@+id/tv_author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="18sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_author_image"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/full_names" />
+
+    <TextView
+        android:id="@+id/tv_author_dates"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_author_image"
+        app:layout_constraintTop_toBottomOf="@+id/tv_author_name"
+        tools:text="26 April 121 – 17 March 180 AD" />
+
+</android.support.constraint.ConstraintLayout>

@@ -44,11 +44,10 @@ public class QuotesActivity extends AppCompatActivity implements QuotesFragment.
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_item_authors:
-                // TODO show the authors fragment
+                startActivity(AuthorsActivity.createIntent(this));
                 break;
             case R.id.menu_item_setting:
-                Intent i = new Intent(this, SettingsActivity.class);
-                startActivity(i);
+                startActivity(SettingsActivity.createIntent(this));
                 break;
         }
         return true;
