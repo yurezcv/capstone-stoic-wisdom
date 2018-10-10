@@ -6,4 +6,6 @@
 
     <color name="textPrimary">#000</color>
     <color name="textSecondary">#A1A1A1</color>
+
+    <color name="bg_selected">#1FFF4081</color>
 </resources>

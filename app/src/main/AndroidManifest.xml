@@ -33,6 +33,22 @@
             android:name=".AuthorsActivity"
             android:label="@string/title_activity_authors"
             android:parentActivityName=".QuotesActivity" />
+
+        <receiver android:name=".widget.QuoteWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/quote_widget_info" />
+        </receiver>
+
+        <activity android:name=".widget.QuoteWidgetConfigureActivity">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

@@ -8,6 +8,8 @@ public class QuoteDisplay {
     private String source;
     private boolean isFavorite;
 
+    private boolean isSelected;
+
     public QuoteDisplay(int id, String quote, String author, String source, boolean isFavorite) {
         this.id = id;
         this.quote = quote;
@@ -59,5 +61,13 @@ public class QuoteDisplay {
 
     public String getSharableContent() {
         return "\u201C"+quote+"\u201D " + getAuthor();
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }
