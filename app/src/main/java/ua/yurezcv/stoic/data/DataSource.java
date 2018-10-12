@@ -36,7 +36,7 @@ public interface DataSource {
 
     void getQuotes(GetQuotesCallback callback);
 
-    void getQuoteById(int quoteId);
+    QuoteDisplay getQuoteById(int quoteId);
 
     void markAsFavorite(int quoteId, boolean isFavorite);
 

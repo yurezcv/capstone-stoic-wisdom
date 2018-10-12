@@ -2,10 +2,18 @@ package ua.yurezcv.stoic.widget;
 
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.widget.RemoteViews;
 
+import java.sql.Array;
+import java.util.Arrays;
+
 import ua.yurezcv.stoic.R;
+import ua.yurezcv.stoic.StoicWisdomApp;
+import ua.yurezcv.stoic.data.DataRepository;
+import ua.yurezcv.stoic.data.model.QuoteDisplay;
 
 /**
  * Implementation of App Widget functionality.
@@ -13,27 +21,58 @@ import ua.yurezcv.stoic.R;
  */
 public class QuoteWidget extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    public static final String QUOTE_WIDGET_BROADCAST = "ua.yurezcv.stoic.widget.QUOTE_WIDGET_BROADCAST";
 
-        // TODO finish up logic here
-        // CharSequence widgetText = QuoteWidgetConfigureActivity.loadQuoteWidgetPref(context, appWidgetId);
-        // Construct the RemoteViews object
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quote_widget);
-        views.setTextViewText(R.id.tv_widget_quote, context.getString(R.string.sample_quote));
-        views.setTextViewText(R.id.tv_widget_author, context.getString(R.string.sample_author));
-        views.setTextViewText(R.id.tv_widget_source, context.getString(R.string.sample_source));
+    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager,
+                                final int[] appWidgetIds, final PendingResult pendingResult) {
 
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                DataRepository repository =
+                        DataRepository.getInstance(context, StoicWisdomApp.getExecutors());
+
+                for (int appWidgetId : appWidgetIds) {
+                    int quoteId = QuoteWidgetConfigureActivity.loadQuoteWidgetPref(context, appWidgetId);
+                    QuoteDisplay quote = repository.getQuoteById(quoteId);
+                    if (quote != null) {
+                        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.quote_widget);
+                        views.setTextViewText(R.id.tv_widget_quote, quote.getQuote());
+                        views.setTextViewText(R.id.tv_widget_author, quote.getAuthor());
+                        views.setTextViewText(R.id.tv_widget_source, quote.getSource());
+                        appWidgetManager.updateAppWidget(appWidgetId, views);
+                    }
+                }
+
+                if (pendingResult != null) {
+                    pendingResult.finish();
+                }
+            }
+        };
+
+        thread.start();
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+
+        if (QUOTE_WIDGET_BROADCAST.equals(intent.getAction())) {
+            PendingResult pendingResult = goAsync();
+
+            AppWidgetManager manager = AppWidgetManager.getInstance(context);
+            ComponentName quoteWidget = new ComponentName(context, QuoteWidget.class);
+            int[] appWidgetIds = manager.getAppWidgetIds(quoteWidget);
+
+            updateAppWidget(context, manager, appWidgetIds, pendingResult);
+        }
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
-        }
+        PendingResult pendingResult = goAsync();
+        updateAppWidget(context, appWidgetManager, appWidgetIds, pendingResult);
     }
 
     @Override

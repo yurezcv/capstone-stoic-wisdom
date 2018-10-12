@@ -49,6 +49,8 @@
     <string name="pref_key_notification_time" translatable="false">key_notification_time</string>
     <string name="pref_default_notification_time" translatable="false">9:30</string>
     <string name="pref_title_notification_time">Notification Time</string>
+    <string name="menu_save_widget">Save Widget</string>
+    <string name="error_widget_no_selection">Please select one quote to add a widget</string>
     <string-array name="pref_list_notifications_time">
         <item>Morning (9:30am)</item>
         <item>Afternoon (1:30pm)</item>

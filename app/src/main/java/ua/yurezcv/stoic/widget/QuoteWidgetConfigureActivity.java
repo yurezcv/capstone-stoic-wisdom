@@ -3,6 +3,7 @@ package ua.yurezcv.stoic.widget;
 import android.appwidget.AppWidgetManager;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,9 +13,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,27 +49,6 @@ public class QuoteWidgetConfigureActivity extends AppCompatActivity {
     TextView mErrorTextView;
 
     private QuotesWidgetAdapter mAdapter;
-
-/*    EditText mAppWidgetText;
-    View.OnClickListener mOnClickListener = new View.OnClickListener() {
-        public void onClick(View v) {
-            final Context context = QuoteWidgetConfigureActivity.this;
-
-            // When the button is clicked, store the string locally
-            String widgetText = mAppWidgetText.getText().toString();
-            saveQuoteWidgetPref(context, mAppWidgetId, widgetText);
-
-            // It is the responsibility of the configuration activity to update the app widget
-            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-            QuoteWidget.updateAppWidget(context, appWidgetManager, mAppWidgetId);
-
-            // Make sure we pass back the original appWidgetId
-            Intent resultValue = new Intent();
-            resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            setResult(RESULT_OK, resultValue);
-            finish();
-        }
-    };*/
 
     public QuoteWidgetConfigureActivity() {
         super();
@@ -123,8 +106,39 @@ public class QuoteWidgetConfigureActivity extends AppCompatActivity {
         // init the recycler view
         mQuotesRecycleView.setLayoutManager(new LinearLayoutManager(this));
         mQuotesRecycleView.setAdapter(mAdapter);
+    }
 
-        // mAppWidgetText.setText(loadQuoteWidgetPref(QuoteWidgetConfigureActivity.this, mAppWidgetId));
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_widget_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_save_widget:
+                if (mAdapter.getSelectedQuoteId() != RecyclerView.NO_POSITION) {
+                    saveQuoteWidgetPref(getApplicationContext(), mAppWidgetId, mAdapter.getSelectedQuoteId());
+
+                    // send a broadcast to update a widget after the first init
+                    Intent broadcast = new Intent(this, QuoteWidget.class);
+                    broadcast.setAction(QuoteWidget.QUOTE_WIDGET_BROADCAST);
+                    sendBroadcast(broadcast);
+
+                    // Make sure we pass back the original appWidgetId
+                    Intent resultValue = new Intent();
+                    resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
+                    setResult(RESULT_OK, resultValue);
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(),
+                            R.string.error_widget_no_selection,
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+        return true;
     }
 
     private void setupViewModel() {

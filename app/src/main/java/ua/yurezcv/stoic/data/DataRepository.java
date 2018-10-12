@@ -7,6 +7,7 @@ import java.util.List;
 import ua.yurezcv.stoic.data.db.LocalRepository;
 import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.Quote;
+import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
 public class DataRepository implements DataSource {
@@ -51,8 +52,8 @@ public class DataRepository implements DataSource {
     }
 
     @Override
-    public void getQuoteById(int quoteId) {
-
+    public QuoteDisplay getQuoteById(int quoteId) {
+        return mLocalRepository.getQuoteById(quoteId);
     }
 
     @Override

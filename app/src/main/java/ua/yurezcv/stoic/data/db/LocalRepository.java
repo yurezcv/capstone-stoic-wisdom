@@ -84,19 +84,12 @@ public class LocalRepository implements DataSource {
                 List<Quote> quotesDb = mDatabase.quoteDao().getAll();
                 List<Author> authors = mDatabase.authorDao().getAll();
 
-                SparseArray<Author> authorMap = new SparseArray<>();
-                for (Author author : authors) {
-                    authorMap.append(author.getId(), author);
-                }
+                SparseArray<Author> authorMap = createAuthorsMap(authors);
 
                 final List<QuoteDisplay> quotes = new ArrayList<>();
                 for (Quote quote : quotesDb) {
-                    QuoteDisplay quoteDisplay = new QuoteDisplay(
-                            quote.getId(),
-                            quote.getQuote(),
-                            authorMap.get(quote.getAuthorId()).getName(),
-                            quote.getSource(),
-                            quote.isFavorite());
+                    QuoteDisplay quoteDisplay = toQuoteDisplay(quote,
+                            authorMap.get(quote.getAuthorId()).getName());
 
                     quotes.add(quoteDisplay);
                 }
@@ -114,8 +107,17 @@ public class LocalRepository implements DataSource {
     }
 
     @Override
-    public void getQuoteById(int quoteId) {
+    public QuoteDisplay getQuoteById(int quoteId) {
+        if(quoteId != -1) {
+            List<Author> authors = mDatabase.authorDao().getAll();
 
+            SparseArray<Author> authorMap = createAuthorsMap(authors);
+            Quote quote = mDatabase.quoteDao().loadById(quoteId);
+
+            return toQuoteDisplay(quote, authorMap.get(quote.getAuthorId()).getName());
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -140,5 +142,23 @@ public class LocalRepository implements DataSource {
         return mDatabase.authorDao().count() == 0 || mDatabase.quoteDao().count() == 0;
     }
 
+    private QuoteDisplay toQuoteDisplay(Quote quote, String author) {
+        return new QuoteDisplay(
+                quote.getId(),
+                quote.getQuote(),
+                author,
+                quote.getSource(),
+                quote.isFavorite());
+    }
+
+    private SparseArray<Author> createAuthorsMap(List<Author> authors) {
+        SparseArray<Author> authorMap = new SparseArray<>();
+
+        for (Author author : authors) {
+            authorMap.append(author.getId(), author);
+        }
+
+        return authorMap;
+    }
 
 }
