@@ -11,7 +11,7 @@
         android:name="ua.yurezcv.stoic.ui.authors.AuthorsFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
         tools:context=".ui.authors.AuthorsFragment"
         tools:listitem="@layout/list_item_author" />
 

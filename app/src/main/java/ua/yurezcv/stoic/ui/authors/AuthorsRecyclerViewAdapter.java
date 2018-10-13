@@ -4,18 +4,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.yurezcv.stoic.R;
 import ua.yurezcv.stoic.data.model.Author;
-import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.ui.authors.AuthorsFragment.OnAuthorsListFragmentInteractionListener;
-
-import java.util.List;
 
 /**
  * {@link RecyclerView.Adapter} that can display a {@link Author} and makes a call to the
@@ -46,8 +44,9 @@ public class AuthorsRecyclerViewAdapter extends RecyclerView.Adapter<AuthorsRecy
 
     public void setData(List<Author> authors) {
         if (mValues != null) {
+            int currentSize = mValues.size();
             mValues.addAll(authors);
-            notifyDataSetChanged();
+            notifyItemRangeInserted(currentSize, authors.size());
         }
     }
 

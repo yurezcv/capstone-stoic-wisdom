@@ -52,8 +52,9 @@ public class QuotesWidgetAdapter extends RecyclerView.Adapter<QuotesWidgetAdapte
 
     public void setData(List<QuoteDisplay> quotes) {
         if (mValues != null) {
+            int currentSize = mValues.size();
             mValues.addAll(quotes);
-            notifyDataSetChanged();
+            notifyItemRangeInserted(currentSize, quotes.size());
         }
     }
 

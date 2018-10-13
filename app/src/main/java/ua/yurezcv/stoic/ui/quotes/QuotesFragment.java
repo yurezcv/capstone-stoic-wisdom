@@ -167,7 +167,7 @@ public class QuotesFragment extends Fragment {
     }
 
     // Setup the callback for when data is received from the service
-    public void setupServiceReceiver() {
+    private void setupServiceReceiver() {
         mReceiver = new FetchResultReceiver(new Handler());
         // This is where we specify what happens when data is received from the service
         mReceiver.setReceiver(new FetchResultReceiver.Receiver() {

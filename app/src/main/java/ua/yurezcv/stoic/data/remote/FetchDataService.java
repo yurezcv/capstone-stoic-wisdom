@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -68,16 +67,10 @@ public class FetchDataService extends IntentService {
                     rec.send(Activity.RESULT_OK, null);
                 }
 
-                Log.d(TAG, "count in quotes table = " + mDatabase.quoteDao().count());
-
-                // mDatabase.quoteDao().insertList(quotes);
                 break;
             case CODE_AUTHORS:
                 List<Author> authors = fetchAuthors();
-
                 mDatabase.authorDao().insert(authors);
-
-                Log.d(TAG, "count in authors table = " + mDatabase.authorDao().count());
                 break;
             default:
                 break;

@@ -38,6 +38,8 @@ public interface DataSource {
 
     QuoteDisplay getQuoteById(int quoteId);
 
+    QuoteDisplay getRandomQuote();
+
     void markAsFavorite(int quoteId, boolean isFavorite);
 
     void saveQuotes(List<Quote> quotes);

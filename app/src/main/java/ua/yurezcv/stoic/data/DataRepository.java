@@ -57,6 +57,11 @@ public class DataRepository implements DataSource {
     }
 
     @Override
+    public QuoteDisplay getRandomQuote() {
+        return mLocalRepository.getRandomQuote();
+    }
+
+    @Override
     public void markAsFavorite(int quoteId, boolean isFavorite) {
         mLocalRepository.markAsFavorite(quoteId, isFavorite);
     }

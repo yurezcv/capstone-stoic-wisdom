@@ -121,6 +121,16 @@ public class LocalRepository implements DataSource {
     }
 
     @Override
+    public QuoteDisplay getRandomQuote() {
+        List<Author> authors = mDatabase.authorDao().getAll();
+
+        SparseArray<Author> authorMap = createAuthorsMap(authors);
+        Quote quote = mDatabase.quoteDao().loadRandom();
+
+        return toQuoteDisplay(quote, authorMap.get(quote.getAuthorId()).getName());
+    }
+
+    @Override
     public void markAsFavorite(final int quoteId, final boolean isFavorite) {
         Runnable runnable = new Runnable() {
 

@@ -3,23 +3,20 @@ package ua.yurezcv.stoic;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.support.v7.app.ActionBar;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
+import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
-import java.util.List;
+import java.util.Calendar;
+
+import ua.yurezcv.stoic.utils.notifications.AlarmsHelper;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -36,57 +33,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static Intent createIntent(Context context) {
         return new Intent(context, SettingsActivity.class);
-    }
-
-    /**
-     * A preference value change listener that updates the preference's summary
-     * to reflect its new value.
-     */
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object value) {
-            String stringValue = value.toString();
-
-            if (preference instanceof ListPreference) {
-                // For list preferences, look up the correct display value in
-                // the preference's 'entries' list.
-                ListPreference listPreference = (ListPreference) preference;
-                int index = listPreference.findIndexOfValue(stringValue);
-
-                // Set the summary to reflect the new value.
-                preference.setSummary(
-                        index >= 0
-                                ? listPreference.getEntries()[index]
-                                : null);
-            } else {
-                // For all other preferences, set the summary to the value's
-                // simple string representation.
-                preference.setSummary(stringValue);
-            }
-            return true;
-        }
-    };
-
-
-    /**
-     * Binds a preference's summary to its value. More specifically, when the
-     * preference's value is changed, its summary (line of text below the
-     * preference title) is updated to reflect the value. The summary is also
-     * immediately updated upon calling this method. The exact display format is
-     * dependent on the type of preference.
-     *
-     * @see #sBindPreferenceSummaryToValueListener
-     */
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
     }
 
     @Override
@@ -115,12 +61,46 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             addPreferencesFromResource(R.xml.preferences);
             setHasOptionsMenu(true);
 
-            // Bind the summaries of EditText/List/Dialog/Ringtone preferences
-            // to their values. When their values change, their summaries are
-            // updated to reflect the new value, per the Android Design
-            // guidelines.
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_notification_freq)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_key_notification_time)));
+            /*
+             * A preference value change listener that updates the preference's summary
+             * to reflect its new value.
+             */
+            Preference.OnPreferenceChangeListener listChangeListener = new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object value) {
+                    String stringValue = value.toString();
+                    if (preference instanceof ListPreference) {
+                        // For list preferences, look up the correct display value in
+                        // the preference's 'entries' list.
+                        ListPreference listPreference = (ListPreference) preference;
+                        int index = listPreference.findIndexOfValue(stringValue);
+
+                        // Set the summary to reflect the new value.
+                        preference.setSummary(
+                                index >= 0
+                                        ? listPreference.getEntries()[index]
+                                        : null);
+
+                        // update time/interval if it was changed
+                        enableNotifications(true);
+                    }
+                    return true;
+                }
+            };
+
+            // bind the listener to both List Preferences
+            bindPreferenceListener(getString(R.string.pref_key_notification_time), listChangeListener);
+            bindPreferenceListener(getString(R.string.pref_key_notification_freq), listChangeListener);
+
+            // bind another listener for the toggle preference
+            Preference notificationToggle = findPreference(getString(R.string.pref_key_enable_notifications));
+            notificationToggle.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    enableNotifications((boolean)newValue);
+                    return true;
+                }
+            });
         }
 
         @Override
@@ -131,6 +111,40 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             }
             return super.onOptionsItemSelected(item);
+        }
+
+        void bindPreferenceListener(String key, Preference.OnPreferenceChangeListener listener) {
+            Preference preference = findPreference(key);
+            String value = PreferenceManager
+                    .getDefaultSharedPreferences(preference.getContext())
+                    .getString(preference.getKey(), "");
+            preference.setOnPreferenceChangeListener(listener);
+            listener.onPreferenceChange(preference, value);
+        }
+
+        public void enableNotifications(boolean isEnabled) {
+            if(isEnabled) {
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                String timeValue = preferences.getString(
+                        getString(R.string.pref_key_notification_time),
+                        getString(R.string.pref_default_notification_time)
+                );
+
+                String[] splitTime = timeValue.split(":");
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(splitTime[0]));
+                calendar.set(Calendar.MINUTE, Integer.parseInt(splitTime[1]));
+                long time = calendar.getTimeInMillis();
+
+                String intervalValue = preferences.getString(
+                        getString(R.string.pref_key_notification_freq),
+                        getString(R.string.pref_default_notification_freq));
+                long interval = Long.parseLong(intervalValue);
+
+                AlarmsHelper.scheduleRepeatingAlarm(getActivity().getApplicationContext(), time, interval);
+            } else {
+                AlarmsHelper.cancelAlarm(getActivity().getApplicationContext());
+            }
         }
     }
 }

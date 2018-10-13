@@ -32,6 +32,9 @@ public interface QuoteDao {
     @Query("SELECT * FROM " + Quote.TABLE_NAME + " WHERE " + Quote.COLUMN_ID + " = :quoteId")
     Quote loadById(int quoteId);
 
+    @Query("SELECT * FROM " + Quote.TABLE_NAME + " ORDER BY RANDOM() LIMIT 1")
+    Quote loadRandom();
+
     @Query("SELECT * FROM " + Quote.TABLE_NAME + " WHERE " + Quote.COLUMN_ID + " IN (:quoteIds)")
     List<Quote> loadAllByIds(int[] quoteIds);
 

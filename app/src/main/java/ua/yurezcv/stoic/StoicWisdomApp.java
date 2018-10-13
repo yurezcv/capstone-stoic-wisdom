@@ -33,9 +33,13 @@ public class StoicWisdomApp extends Application {
     public static boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
+        
+        if(cm != null) {
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+            return activeNetwork != null &&
+                    activeNetwork.isConnectedOrConnecting();
+        }
 
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        return activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+        return false;
     }
 }

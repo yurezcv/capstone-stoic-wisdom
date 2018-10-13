@@ -1,6 +1,5 @@
 package ua.yurezcv.stoic;
 
-import android.arch.persistence.room.Room;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,17 +10,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.List;
-import java.util.concurrent.Executors;
-
 import ua.yurezcv.stoic.data.DataRepository;
-import ua.yurezcv.stoic.data.db.StoicWisdomDatabase;
-import ua.yurezcv.stoic.data.model.Quote;
 import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.data.remote.FetchDataService;
 import ua.yurezcv.stoic.ui.quotes.QuotesFragment;
+import ua.yurezcv.stoic.utils.notifications.NotificationsService;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
-import ua.yurezcv.stoic.utils.threading.DiskIOThreadExecutor;
 
 public class QuotesActivity extends AppCompatActivity implements QuotesFragment.OnQuotesFragmentInteractionListener {
 
@@ -30,7 +24,6 @@ public class QuotesActivity extends AppCompatActivity implements QuotesFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_quotes);
         setContentView(R.layout.activity_fragment_holder);
     }
 
@@ -48,6 +41,9 @@ public class QuotesActivity extends AppCompatActivity implements QuotesFragment.
                 break;
             case R.id.menu_item_setting:
                 startActivity(SettingsActivity.createIntent(this));
+                break;
+            case R.id.menu_show_notification:
+                NotificationsService.startService(this);
                 break;
         }
         return true;
@@ -94,7 +90,16 @@ public class QuotesActivity extends AppCompatActivity implements QuotesFragment.
 
         @Override
         protected Void doInBackground(Void... voids) {
-            StoicWisdomDatabase database = Room.databaseBuilder(getApplicationContext(),
+
+            AppExecutors appExecutors = StoicWisdomApp.getExecutors();
+            DataRepository repository = DataRepository.getInstance(getApplicationContext(), appExecutors);
+
+            QuoteDisplay quoteDisplay = repository.getRandomQuote();
+            Log.d(TAG, "random quote = " + quoteDisplay.getSharableContent());
+
+            // Log.d(TAG, "quotes table count = " + database.quoteDao().count());
+
+            /*StoicWisdomDatabase database = Room.databaseBuilder(getApplicationContext(),
                     StoicWisdomDatabase.class, StoicWisdomDatabase.DATABASE_NAME).build();
 
             Log.d(TAG, "authors table count = " + database.authorDao().count());
@@ -110,7 +115,7 @@ public class QuotesActivity extends AppCompatActivity implements QuotesFragment.
 
             for (Quote quote: byAuthor) {
                 Log.d(TAG, "quote by author = " + quote.getQuote());
-            }
+            }*/
 
             return null;
         }

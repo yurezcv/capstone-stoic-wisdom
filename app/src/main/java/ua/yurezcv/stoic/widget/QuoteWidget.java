@@ -7,9 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import java.sql.Array;
-import java.util.Arrays;
-
 import ua.yurezcv.stoic.R;
 import ua.yurezcv.stoic.StoicWisdomApp;
 import ua.yurezcv.stoic.data.DataRepository;
@@ -23,8 +20,8 @@ public class QuoteWidget extends AppWidgetProvider {
 
     public static final String QUOTE_WIDGET_BROADCAST = "ua.yurezcv.stoic.widget.QUOTE_WIDGET_BROADCAST";
 
-    static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager,
-                                final int[] appWidgetIds, final PendingResult pendingResult) {
+    private static void updateAppWidget(final Context context, final AppWidgetManager appWidgetManager,
+                                        final int[] appWidgetIds, final PendingResult pendingResult) {
 
         Thread thread = new Thread() {
             @Override

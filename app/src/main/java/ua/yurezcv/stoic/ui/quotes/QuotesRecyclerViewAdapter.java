@@ -47,12 +47,13 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
 
     public void setData(List<QuoteDisplay> quotes) {
         if (mValues != null) {
+            int currentSize = mValues.size();
             mValues.addAll(quotes);
-            notifyDataSetChanged();
+            notifyItemRangeInserted(currentSize, quotes.size());
         }
     }
 
-    public boolean isEmpty() {
+    boolean isEmpty() {
         return getItemCount() == 0;
     }
 

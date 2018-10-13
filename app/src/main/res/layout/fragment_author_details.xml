@@ -16,6 +16,7 @@
             android:layout_height="150dp"
             android:adjustViewBounds="true"
             android:background="@color/colorPrimary"
+            android:contentDescription="@string/cd_author_image"
             android:cropToPadding="false"
             android:scaleType="centerCrop"
             app:layout_constraintLeft_toLeftOf="parent"
