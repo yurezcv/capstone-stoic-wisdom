@@ -13,4 +13,8 @@
         <item name="colorAccent">@color/colorPrimary</item>
     </style>
 
+    <style name="FilterSpinnerTextView" parent="Widget.AppCompat.DropDownItem.Spinner">
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

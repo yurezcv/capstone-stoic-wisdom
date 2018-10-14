@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ua.yurezcv.stoic.R;
 import ua.yurezcv.stoic.data.model.Author;
+import ua.yurezcv.stoic.utils.EmptyLocalDataException;
 
 /**
  * A fragment representing a list of Items.
@@ -107,7 +108,7 @@ public class AuthorsFragment extends Fragment {
     }
 
     private void setupViewModel() {
-        AuthorsViewModel viewModel = ViewModelProviders.of(this).get(AuthorsViewModel.class);
+        final AuthorsViewModel viewModel = ViewModelProviders.of(this).get(AuthorsViewModel.class);
         viewModel.getAuthors().observe(this, new Observer<List<Author>>() {
 
             @Override
@@ -115,6 +116,13 @@ public class AuthorsFragment extends Fragment {
                 if (authors != null && !authors.isEmpty()) {
                     mAdapter.setData(authors);
                     hideProgressBar();
+                } else if (viewModel.isError()) {
+                    String error;
+                    Throwable throwable = viewModel.getError();
+                    if(throwable instanceof EmptyLocalDataException) {
+                        error = getString(R.string.error_no_author);
+                        showErrorMessage(error);
+                    }
                 }
             }
         });
@@ -123,6 +131,12 @@ public class AuthorsFragment extends Fragment {
     private void hideProgressBar() {
         mProgressBar.setVisibility(View.GONE);
         mAuthorsRecycleView.setVisibility(View.VISIBLE);
+    }
+
+    private void showErrorMessage(String message) {
+        mErrorTextView.setText(message);
+        mErrorTextView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.GONE);
     }
 
     /**

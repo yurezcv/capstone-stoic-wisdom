@@ -24,15 +24,23 @@ public class QuotesViewModel extends AndroidViewModel {
 
         mQuotes = new MutableLiveData<>();
 
-        loadData();
+        loadAll();
     }
 
-    public void loadData() {
+    void loadAll() {
+        loadQuotes(DataSource.FILTER_ALL);
+    }
+
+    void loadFavorites() {
+        loadQuotes(DataSource.FILTER_FAVORITES);
+    }
+
+    private void loadQuotes(int filter) {
         AppExecutors appExecutors = StoicWisdomApp.getExecutors();
         DataRepository dataRepository = DataRepository.getInstance(this.getApplication(),
                 appExecutors);
 
-        dataRepository.getQuotes(new DataSource.GetQuotesCallback() {
+        dataRepository.getQuotes(filter, new DataSource.GetQuotesCallback() {
             @Override
             public void onSuccess(List<QuoteDisplay> quotes) {
                 mQuotes.postValue(quotes);
@@ -44,15 +52,10 @@ public class QuotesViewModel extends AndroidViewModel {
                     mQuotes.setValue(null);
                 }
             }
-
-            @Override
-            public void onNetworkFailure() {
-
-            }
         });
     }
 
-    public LiveData<List<QuoteDisplay>> getQuotes() {
+    public LiveData<List<QuoteDisplay>> getData() {
         return mQuotes;
     }
 }

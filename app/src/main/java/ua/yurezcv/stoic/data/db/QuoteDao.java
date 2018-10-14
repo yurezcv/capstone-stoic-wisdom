@@ -35,12 +35,6 @@ public interface QuoteDao {
     @Query("SELECT * FROM " + Quote.TABLE_NAME + " ORDER BY RANDOM() LIMIT 1")
     Quote loadRandom();
 
-    @Query("SELECT * FROM " + Quote.TABLE_NAME + " WHERE " + Quote.COLUMN_ID + " IN (:quoteIds)")
-    List<Quote> loadAllByIds(int[] quoteIds);
-
-    @Query("SELECT * FROM " + Quote.TABLE_NAME + " WHERE " + Quote.COLUMN_AUTHOR + " = :authorId")
-    List<Quote> findByAuthorId(long authorId);
-
     @Query("SELECT * FROM " + Quote.TABLE_NAME + " WHERE " + Quote.COLUMN_IS_FAVORITE + " = 1")
     List<Quote> loadFavoriteQuotes();
 

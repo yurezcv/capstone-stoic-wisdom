@@ -20,6 +20,8 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
     private final List<QuoteDisplay> mValues;
     private final QuotesFragment.OnQuotesFragmentInteractionListener mListener;
 
+    private boolean isFavorites = false;
+
     QuotesRecyclerViewAdapter(List<QuoteDisplay> mValues,
                               QuotesFragment.OnQuotesFragmentInteractionListener listener) {
         this.mValues = mValues;
@@ -47,14 +49,18 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
 
     public void setData(List<QuoteDisplay> quotes) {
         if (mValues != null) {
-            int currentSize = mValues.size();
+            mValues.clear();
             mValues.addAll(quotes);
-            notifyItemRangeInserted(currentSize, quotes.size());
+            notifyDataSetChanged();
         }
     }
 
     boolean isEmpty() {
         return getItemCount() == 0;
+    }
+
+    public void setFavorites(boolean favorites) {
+        isFavorites = favorites;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -109,6 +115,10 @@ public class QuotesRecyclerViewAdapter extends RecyclerView.Adapter<QuotesRecycl
                         mQuote.setFavorite(!mQuote.isFavorite());
                         toggleLikeIcon();
                         mListener.onQuoteLike(mQuote.getId(), mQuote.isFavorite());
+                        if(isFavorites) {
+                            mValues.remove(position);
+                            notifyItemRemoved(position);
+                        }
                         break;
                     case R.id.btn_share_quote:
                         mListener.onQuoteShare(mQuote);

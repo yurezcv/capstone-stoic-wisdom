@@ -46,8 +46,11 @@ public class QuotesWidgetAdapter extends RecyclerView.Adapter<QuotesWidgetAdapte
         return mValues.size();
     }
 
-    public int getSelectedQuoteId() {
-        return mValues.get(selectedPosition).getId();
+    int getSelectedQuoteId() {
+        if(!mValues.isEmpty())
+            return mValues.get(selectedPosition).getId();
+        else
+            return RecyclerView.NO_POSITION;
     }
 
     public void setData(List<QuoteDisplay> quotes) {

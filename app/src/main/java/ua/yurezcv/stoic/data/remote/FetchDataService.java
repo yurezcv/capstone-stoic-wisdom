@@ -6,6 +6,7 @@ import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.support.annotation.Nullable;
 
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+import ua.yurezcv.stoic.R;
 import ua.yurezcv.stoic.data.db.StoicWisdomDatabase;
 import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.data.model.QuoteJson;
@@ -24,6 +26,7 @@ public class FetchDataService extends IntentService {
 
     public static final int CODE_QUOTES = 0;
     public static final int CODE_AUTHORS = 1;
+    public static final String KEY_ERROR_MESSAGE = "key_error_message";
 
     private static final String TAG = "FetchDataService";
 
@@ -48,27 +51,34 @@ public class FetchDataService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        if(!isOnline()) {
-            return;
-        }
-
         int code = intent.getIntExtra(KEY_REQUEST, CODE_QUOTES);
 
         switch (code) {
             case CODE_QUOTES:
+                ResultReceiver rec = intent.getParcelableExtra(KEY_RECEIVER);
+                if(!isOnline() && rec != null) {
+                    Bundle bundle = new Bundle();
+                    bundle.putString(KEY_ERROR_MESSAGE, getString(R.string.error_no_connection));
+                    rec.send(Activity.RESULT_CANCELED, bundle);
+
+                    return;
+                }
+
                 List<QuoteJson> responseQuotes = fetchQuotes();
 
                 for (QuoteJson quoteJson: responseQuotes) {
                     mDatabase.quoteDao().insert(quoteJson.toQuote());
                 }
 
-                ResultReceiver rec = intent.getParcelableExtra(KEY_RECEIVER);
                 if(rec != null) {
                     rec.send(Activity.RESULT_OK, null);
                 }
 
                 break;
             case CODE_AUTHORS:
+                if(!isOnline()) {
+                    return;
+                }
                 List<Author> authors = fetchAuthors();
                 mDatabase.authorDao().insert(authors);
                 break;

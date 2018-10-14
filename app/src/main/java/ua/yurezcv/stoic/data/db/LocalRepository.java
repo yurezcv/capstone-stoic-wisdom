@@ -14,6 +14,8 @@ import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.utils.EmptyLocalDataException;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
+import static ua.yurezcv.stoic.data.DataSource.FILTER_ALL;
+
 public class LocalRepository implements DataSource {
 
     private final StoicWisdomDatabase mDatabase;
@@ -56,17 +58,7 @@ public class LocalRepository implements DataSource {
     }
 
     @Override
-    public void getAuthorById(long authorId, GetAuthorCallback callback) {
-
-    }
-
-    @Override
-    public void saveAuthors(List<Author> authors) {
-
-    }
-
-    @Override
-    public void getQuotes(final GetQuotesCallback callback) {
+    public void getQuotes(final int filter, final GetQuotesCallback callback) {
         Runnable runnable = new Runnable() {
 
             @Override
@@ -81,10 +73,18 @@ public class LocalRepository implements DataSource {
                     });
                 }
 
-                List<Quote> quotesDb = mDatabase.quoteDao().getAll();
                 List<Author> authors = mDatabase.authorDao().getAll();
-
                 SparseArray<Author> authorMap = createAuthorsMap(authors);
+
+                List<Quote> quotesDb;
+                switch (filter) {
+                    case DataSource.FILTER_FAVORITES:
+                        quotesDb = mDatabase.quoteDao().loadFavoriteQuotes();
+                        break;
+                    default:
+                        quotesDb = mDatabase.quoteDao().getAll();
+                        break;
+                }
 
                 final List<QuoteDisplay> quotes = new ArrayList<>();
                 for (Quote quote : quotesDb) {
@@ -141,11 +141,6 @@ public class LocalRepository implements DataSource {
         };
 
         mExecutors.diskIO().execute(runnable);
-    }
-
-    @Override
-    public void saveQuotes(List<Quote> quotes) {
-
     }
 
     private boolean isEmpty() {

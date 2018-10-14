@@ -11,13 +11,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 import ua.yurezcv.stoic.R;
 import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.ui.quotes.QuotesViewModel;
+import ua.yurezcv.stoic.utils.Analytics;
 
 /**
  * The configuration screen for the {@link QuoteWidget QuoteWidget} AppWidget.
@@ -36,6 +38,8 @@ public class QuoteWidgetConfigureActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "ua.yurezcv.stoic.widget.QuoteWidget";
     private static final String PREF_PREFIX_KEY = "appwidget_";
     int mAppWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     // UI elements
     @BindView(R.id.rv_widget_quotes)
@@ -83,6 +87,7 @@ public class QuoteWidgetConfigureActivity extends AppCompatActivity {
 
         setContentView(R.layout.quote_widget_configure);
         ButterKnife.bind(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         // Find the widget id from the intent.
         Intent intent = getIntent();
@@ -125,6 +130,11 @@ public class QuoteWidgetConfigureActivity extends AppCompatActivity {
                     broadcast.setAction(QuoteWidget.QUOTE_WIDGET_BROADCAST);
                     sendBroadcast(broadcast);
 
+                    // log quote id for added widget
+                    Bundle analyticsBundle = new Bundle();
+                    analyticsBundle.putInt(FirebaseAnalytics.Param.ITEM_ID, mAdapter.getSelectedQuoteId());
+                    mFirebaseAnalytics.logEvent(Analytics.EVENT_WIDGET_ADDED, analyticsBundle);
+
                     // Make sure we pass back the original appWidgetId
                     Intent resultValue = new Intent();
                     resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
@@ -142,21 +152,24 @@ public class QuoteWidgetConfigureActivity extends AppCompatActivity {
 
     private void setupViewModel() {
         QuotesViewModel viewModel = ViewModelProviders.of(this).get(QuotesViewModel.class);
-        viewModel.getQuotes().observe(this, new Observer<List<QuoteDisplay>>() {
+        viewModel.getData().observe(this, new Observer<List<QuoteDisplay>>() {
 
             @Override
             public void onChanged(@Nullable List<QuoteDisplay> quoteList) {
-
                 if (quoteList != null) {
                     mAdapter.setData(quoteList);
                     hideProgressBar();
                 } else {
-                    // show an error
-                    Log.d("WidgetConfigActivity", "quotes list is empty");
+                    showErrorMessage();
                 }
 
             }
         });
+    }
+
+    private void showErrorMessage() {
+        mProgressBar.setVisibility(View.GONE);
+        mErrorTextView.setText(R.string.error_no_quotes);
     }
 
     private void hideProgressBar() {

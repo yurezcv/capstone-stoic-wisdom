@@ -23,6 +23,11 @@
     <string name="error_widget_no_selection">Please select one quote to add a widget</string>
     <string name="quote_channel_name">Your new inspiration quote!</string>
 
+    <string-array name="filter_spinner_values">
+        <item>All Quotes</item>
+        <item>Only Favorites</item>
+    </string-array>
+
 
     <!-- Strings related to Settings -->
     <string name="title_activity_settings">Settings</string>
@@ -55,6 +60,10 @@
     <string name="pref_title_notification_time">Notification Time</string>
     <string name="menu_title_notification">Show Notification</string>
     <string name="cd_author_image">Author Image</string>
+    <string name="error_no_favorites">You don\'t have any favorite quotes</string>
+    <string name="error_no_connection">No Internet Connection</string>
+    <string name="error_no_author">There are no authors</string>
+    <string name="error_no_quotes">Please open the app before adding a widget</string>
     <string-array name="pref_list_notifications_time">
         <item>Morning (9:30am)</item>
         <item>Afternoon (1:30pm)</item>

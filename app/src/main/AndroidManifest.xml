@@ -53,6 +53,9 @@
         <service
             android:name=".utils.notifications.NotificationsService"
             android:exported="false"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="3cf21c0ff1ed0ab6e209ff3ab5011df2ee0e4374" />
     </application>
 
 </manifest>

@@ -2,11 +2,7 @@ package ua.yurezcv.stoic.data;
 
 import android.content.Context;
 
-import java.util.List;
-
 import ua.yurezcv.stoic.data.db.LocalRepository;
-import ua.yurezcv.stoic.data.model.Author;
-import ua.yurezcv.stoic.data.model.Quote;
 import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
@@ -37,18 +33,8 @@ public class DataRepository implements DataSource {
     }
 
     @Override
-    public void getAuthorById(long authorId, GetAuthorCallback callback) {
-
-    }
-
-    @Override
-    public void saveAuthors(List<Author> authors) {
-
-    }
-
-    @Override
-    public void getQuotes(GetQuotesCallback callback) {
-        mLocalRepository.getQuotes(callback);
+    public void getQuotes(int filter, GetQuotesCallback callback) {
+        mLocalRepository.getQuotes(filter, callback);
     }
 
     @Override
@@ -64,10 +50,5 @@ public class DataRepository implements DataSource {
     @Override
     public void markAsFavorite(int quoteId, boolean isFavorite) {
         mLocalRepository.markAsFavorite(quoteId, isFavorite);
-    }
-
-    @Override
-    public void saveQuotes(List<Quote> quotes) {
-
     }
 }

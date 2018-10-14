@@ -10,21 +10,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import ua.yurezcv.stoic.data.DataRepository;
 import ua.yurezcv.stoic.data.model.QuoteDisplay;
 import ua.yurezcv.stoic.data.remote.FetchDataService;
 import ua.yurezcv.stoic.ui.quotes.QuotesFragment;
+import ua.yurezcv.stoic.utils.Analytics;
 import ua.yurezcv.stoic.utils.notifications.NotificationsService;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
 public class QuotesActivity extends AppCompatActivity implements QuotesFragment.OnQuotesFragmentInteractionListener {
 
-    private static final String TAG = "QuotesActivity";
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment_holder);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
     }
 
     @Override
@@ -54,6 +59,13 @@ public class QuotesActivity extends AppCompatActivity implements QuotesFragment.
         AppExecutors appExecutors = StoicWisdomApp.getExecutors();
         DataRepository repository = DataRepository.getInstance(getApplicationContext(), appExecutors);
         repository.markAsFavorite(quoteId, isInFavorites);
+
+        if(isInFavorites) {
+            // log liked quotes ids
+            Bundle analyticsBundle = new Bundle();
+            analyticsBundle.putInt(FirebaseAnalytics.Param.ITEM_ID, quoteId);
+            mFirebaseAnalytics.logEvent(Analytics.EVENT_LIKE, analyticsBundle);
+        }
     }
 
     @Override
@@ -61,63 +73,15 @@ public class QuotesActivity extends AppCompatActivity implements QuotesFragment.
         shareTheQuote(quoteDisplay);
     }
 
-    public void checkCount(View view) {
-        new DatabaseAsync().execute();
-    }
-
-    public void fetchQuotes(View view) {
-        startFetchService(FetchDataService.CODE_QUOTES);
-    }
-
-    public void fetchAuthors(View view) {
-        startFetchService(FetchDataService.CODE_AUTHORS);
-    }
-
-    private void startFetchService(int code) {
-        Intent i = FetchDataService.createIntent(this);
-        i.putExtra(FetchDataService.KEY_REQUEST, code);
-        startService(i);
-    }
-
     private void shareTheQuote(QuoteDisplay quoteDisplay) {
+        // log shared quotes ids
+        Bundle analyticsBundle = new Bundle();
+        analyticsBundle.putInt(FirebaseAnalytics.Param.ITEM_ID, quoteDisplay.getId());
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SHARE, analyticsBundle);
+
         Intent sharingIntent = new Intent(Intent.ACTION_SEND);
         sharingIntent.setType("text/html");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, Html.fromHtml(quoteDisplay.getSharableContent()));
         startActivity(Intent.createChooser(sharingIntent, getResources().getString(R.string.sharable_title)));
-    }
-
-    private class DatabaseAsync extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            AppExecutors appExecutors = StoicWisdomApp.getExecutors();
-            DataRepository repository = DataRepository.getInstance(getApplicationContext(), appExecutors);
-
-            QuoteDisplay quoteDisplay = repository.getRandomQuote();
-            Log.d(TAG, "random quote = " + quoteDisplay.getSharableContent());
-
-            // Log.d(TAG, "quotes table count = " + database.quoteDao().count());
-
-            /*StoicWisdomDatabase database = Room.databaseBuilder(getApplicationContext(),
-                    StoicWisdomDatabase.class, StoicWisdomDatabase.DATABASE_NAME).build();
-
-            Log.d(TAG, "authors table count = " + database.authorDao().count());
-            Log.d(TAG, "quotes table count = " + database.quoteDao().count());
-
-            List<Quote> quotes = database.quoteDao().getAll();
-
-            Log.d(TAG, "quote #1 = " + quotes.get(0).getQuote());
-            Log.d(TAG, "quote #5 = " + quotes.get(4).getQuote());
-            Log.d(TAG, "quote #11 = " + quotes.get(10).getQuote());
-
-            List<Quote> byAuthor = database.quoteDao().findByAuthorId(2);
-
-            for (Quote quote: byAuthor) {
-                Log.d(TAG, "quote by author = " + quote.getQuote());
-            }*/
-
-            return null;
-        }
     }
 }

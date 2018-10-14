@@ -19,6 +19,9 @@ class AuthorsViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Author>> mAuthors;
 
+    private boolean isError;
+    private Throwable mErrorThrowable;
+
     public AuthorsViewModel(@NonNull Application application) {
         super(application);
 
@@ -43,16 +46,21 @@ class AuthorsViewModel extends AndroidViewModel {
                 if (throwable instanceof EmptyLocalDataException) {
                     mAuthors.setValue(null);
                 }
-            }
-
-            @Override
-            public void onNetworkFailure() {
-
+                isError = true;
+                mErrorThrowable = throwable;
             }
         });
     }
 
     public LiveData<List<Author>> getAuthors() {
         return mAuthors;
+    }
+
+    public boolean isError() {
+        return isError;
+    }
+
+    public Throwable getError() {
+        return mErrorThrowable;
     }
 }

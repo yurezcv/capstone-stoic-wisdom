@@ -2,21 +2,48 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.quotes.QuotesFragment">
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_quotes"
-        android:name="QuotesFragment"
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
-        android:visibility="invisible"
-        tools:listitem="@layout/list_item_quote" />
+        tools:context=".ui.quotes.QuotesFragment">
 
-    <include layout="@layout/layout_pb_and_error" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner_quotes_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginTop="@dimen/margin_default_vertical"
+                android:entries="@array/filter_spinner_values"
+                android:visibility="invisible" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_quotes"
+                android:name="QuotesFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_default_horizontal"
+                android:layout_marginLeft="@dimen/margin_default_horizontal"
+                android:layout_marginEnd="@dimen/margin_default_horizontal"
+                android:layout_marginRight="@dimen/margin_default_horizontal"
+                android:visibility="invisible"
+                tools:listitem="@layout/list_item_quote" />
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_loader_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <include layout="@layout/layout_pb_and_error" />
+    </LinearLayout>
 </FrameLayout>
