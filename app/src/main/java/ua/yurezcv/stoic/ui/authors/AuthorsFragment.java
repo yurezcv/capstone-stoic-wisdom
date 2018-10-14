@@ -117,12 +117,7 @@ public class AuthorsFragment extends Fragment {
                     mAdapter.setData(authors);
                     hideProgressBar();
                 } else if (viewModel.isError()) {
-                    String error;
-                    Throwable throwable = viewModel.getError();
-                    if(throwable instanceof EmptyLocalDataException) {
-                        error = getString(R.string.error_no_author);
-                        showErrorMessage(error);
-                    }
+                    showErrorMessage();
                 }
             }
         });
@@ -133,8 +128,8 @@ public class AuthorsFragment extends Fragment {
         mAuthorsRecycleView.setVisibility(View.VISIBLE);
     }
 
-    private void showErrorMessage(String message) {
-        mErrorTextView.setText(message);
+    private void showErrorMessage() {
+        mErrorTextView.setText(R.string.error_no_author);
         mErrorTextView.setVisibility(View.VISIBLE);
         mProgressBar.setVisibility(View.GONE);
     }

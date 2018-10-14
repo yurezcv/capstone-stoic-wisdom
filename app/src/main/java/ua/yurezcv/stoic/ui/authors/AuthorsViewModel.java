@@ -15,7 +15,7 @@ import ua.yurezcv.stoic.data.model.Author;
 import ua.yurezcv.stoic.utils.EmptyLocalDataException;
 import ua.yurezcv.stoic.utils.threading.AppExecutors;
 
-class AuthorsViewModel extends AndroidViewModel {
+public class AuthorsViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<Author>> mAuthors;
 
