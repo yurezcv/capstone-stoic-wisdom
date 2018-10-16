@@ -71,10 +71,10 @@ public class NotificationsService extends IntentService {
         PendingIntent launchIntent = PendingIntent.getActivity(this, 0,
                 startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        final NotificationCompat.Builder earthquakeNotificationBuilder
+        final NotificationCompat.Builder quoteNotificationBuilder
                 = new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL);
 
-        earthquakeNotificationBuilder
+        quoteNotificationBuilder
                 .setSmallIcon(R.drawable.ic_sample_author_1)
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -83,7 +83,7 @@ public class NotificationsService extends IntentService {
                 .setAutoCancel(true)
                 .setShowWhen(true);
 
-        earthquakeNotificationBuilder
+        quoteNotificationBuilder
                 .setContentTitle(quote.getAuthor())
                 .setContentText(quote.getQuote()).setStyle(new NotificationCompat.BigTextStyle()
                 .bigText(quote.getQuote()));
@@ -92,7 +92,7 @@ public class NotificationsService extends IntentService {
                 = NotificationManagerCompat.from(this);
 
         notificationManager.notify(NOTIFICATION_ID,
-                earthquakeNotificationBuilder.build());
+                quoteNotificationBuilder.build());
     }
 
 }

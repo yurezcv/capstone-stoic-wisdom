@@ -5,6 +5,7 @@
 .DS_Store
 /build
 /captures
+app/fabric.properties
 
 # Built application files
 *.apk

@@ -25,8 +25,8 @@
 
             <ImageButton
                 android:id="@+id/btn_like_quote"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/image_btn_size"
+                android:layout_height="@dimen/image_btn_size"
                 android:layout_marginEnd="@dimen/cardview_view_margin"
                 android:layout_marginRight="@dimen/cardview_view_margin"
                 android:background="?attr/selectableItemBackgroundBorderless"
@@ -38,8 +38,8 @@
 
             <ImageButton
                 android:id="@+id/btn_share_quote"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="@dimen/image_btn_size"
+                android:layout_height="@dimen/image_btn_size"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/cd_share_button"
                 android:text="@string/share"

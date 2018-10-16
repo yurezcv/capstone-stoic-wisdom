@@ -2,9 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#99FFFFFF"
+    android:background="@color/bg_widget"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="@dimen/padding_widget">
 
     <TextView
         android:id="@+id/tv_widget_quote"
@@ -14,7 +14,7 @@
         android:fontFamily="sans-serif-condensed"
         android:text="@string/sample_quote"
         android:textColor="@color/textPrimary"
-        android:textSize="17sp"
+        android:textSize="@dimen/text_size_widget_quote"
         tools:text="@string/sample_quote" />
 
     <TextView
@@ -25,7 +25,7 @@
         android:fontFamily="sans-serif"
         android:text="@string/sample_author"
         android:textColor="@color/textPrimary"
-        android:textSize="13sp"
+        android:textSize="@dimen/text_size_widget_author"
         tools:text="@string/sample_author" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:fontFamily="sans-serif"
         android:text="@string/sample_author"
         android:textColor="@color/textPrimary"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_size_widget_source"
         tools:text="@string/sample_source" />
 
 </LinearLayout>

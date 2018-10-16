@@ -26,8 +26,8 @@
 
         <android.support.v4.widget.Space
             android:id="@+id/view_spacer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="@dimen/zero"
+            android:layout_height="@dimen/zero"
             android:layout_marginBottom="100dp"
             app:layout_constraintBottom_toBottomOf="@id/iv_detail_backdrop"
             app:layout_constraintLeft_toLeftOf="@id/iv_detail_backdrop"
@@ -37,17 +37,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
+            android:padding="@dimen/margin_default_horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="@id/view_spacer">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_author_circle_image"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
+                android:layout_width="@dimen/image_author_details_size"
+                android:layout_height="@dimen/image_author_list_size"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
-                android:background="@color/colorAccent"
+                android:layout_marginBottom="@dimen/margin_default_horizontal"
                 tools:src="@tools:sample/backgrounds/scenic" />
 
             <TextView
@@ -64,7 +63,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="@dimen/margin_default_horizontal"
                 android:textAppearance="@style/TextAppearance.AppCompat.Menu"
                 android:textColor="@color/textSecondary"
                 tools:text="26 April 121 – 17 March 180 AD" />

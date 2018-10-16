@@ -7,11 +7,19 @@
     <dimen name="zero">0dp</dimen>
     <dimen name="text_margin">16dp</dimen>
 
-    <!--
-Refer to App Widget Documentation for margin information
-http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
-    -->
+    <!-- Text Sizes -->
+    <dimen name="text_size_card_quote">22sp</dimen>
+    <dimen name="text_size_card_author">16sp</dimen>
+    <dimen name="text_size_card_source">14sp</dimen>
+    <dimen name="text_size_widget_quote">17sp</dimen>
+    <dimen name="text_size_widget_author">13sp</dimen>
+    <dimen name="text_size_widget_source">12sp</dimen>
+
     <dimen name="widget_margin">8dp</dimen>
     <dimen name="margin_default_horizontal">16dp</dimen>
     <dimen name="margin_default_vertical">8dp</dimen>
+    <dimen name="padding_widget">8dp</dimen>
+    <dimen name="image_btn_size">32dp</dimen>
+    <dimen name="image_author_list_size">40dp</dimen>
+    <dimen name="image_author_details_size">150dp</dimen>
 </resources>
