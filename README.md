@@ -14,7 +14,7 @@ Use it as a place for an inspiration for the day. Save your favorites quotes. Di
 * Has ability to select a quote and add the selected quote to homescreen in a form of a homescreen widget.
 
 ## Built With
-* [Android Architecture Compoments](https://developer.android.com/topic/libraries/architecture/)
+* [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/)
 * [gson](https://github.com/google/gson) - A Java serialization/deserialization library to convert Java Objects into JSON and back
 * [OkHttp](https://square.github.io/okhttp/) - An HTTP & HTTP/2 client for Android and Java applications
 * [CircleImageView](https://github.com/hdodenhof/CircleImageView) - A fast circular ImageView perfect for profile images.
